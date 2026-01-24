@@ -2,400 +2,676 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VR Quant Capital</title>
-  <meta name="description" content="VR Quant Capital is a systematic investment firm focused on quantitative research, disciplined risk management, and automated execution." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VRQuant Capital - Algorithmic Trading Platform</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root{
-      --bg:#0b1220;
-      --card:#0f1a2f;
-      --text:#eaf0ff;
-      --muted:#b8c3e6;
-      --accent:#6ee7ff;
-      --line:rgba(255,255,255,.12);
-      --good:#3cf2a3;
+      --primary:#8b5cf6;
+      --secondary:#3b82f6;
+      --success:#10b981;
+      --danger:#ef4444;
+      --dark:#0f172a;
+      --darker:#020617;
+      --light:#f8fafc;
+      --gray:#94a3b8;
+      --card-bg:rgba(30,41,59,.5);
+      --border:rgba(139,92,246,.2);
+      --border-strong:rgba(139,92,246,.4);
+      --shadow:0 12px 30px -12px rgba(139,92,246,.35);
     }
-    *{box-sizing:border-box}
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: radial-gradient(1200px 600px at 30% -10%, rgba(110,231,255,.18), transparent 50%),
-                  radial-gradient(900px 500px at 80% 0%, rgba(60,242,163,.12), transparent 50%),
-                  var(--bg);
-      color:var(--text);
-      line-height:1.55;
+      font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+      background:linear-gradient(135deg,var(--darker),#4c1d95,var(--darker));
+      color:var(--light);
+      min-height:100vh;
+      line-height:1.6;
     }
-    a{color:inherit; text-decoration:none}
-    .container{max-width:1100px; margin:0 auto; padding:0 20px}
+    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 2rem}
+
+    /* Header */
     header{
-      position:sticky; top:0;
-      backdrop-filter: blur(14px);
-      background: rgba(11,18,32,.55);
-      border-bottom:1px solid var(--line);
-      z-index:10;
+      position:sticky;
+      top:0;
+      z-index:50;
+      border-bottom:1px solid var(--border);
+      padding:1rem 0;
+      backdrop-filter:saturate(180%) blur(12px);
+      background:rgba(2,6,23,.25);
+      transition:all .25s ease;
     }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 0;
+    header.scrolled{
+      background:rgba(2,6,23,.55);
+      border-bottom:1px solid var(--border-strong);
+      box-shadow:var(--shadow);
     }
-    .brand{
-      display:flex; gap:12px; align-items:center;
-      font-weight:700; letter-spacing:.2px;
-    }
+    .header-content{display:flex;justify-content:space-between;align-items:center;gap:1rem}
+
     .logo{
-      width:38px; height:38px;
-      border-radius:12px;
-      background: linear-gradient(135deg, rgba(110,231,255,.9), rgba(60,242,163,.7));
-      box-shadow: 0 16px 40px rgba(0,0,0,.25);
+      display:flex;align-items:center;gap:.75rem;
+      font-size:1.5rem;font-weight:800;
+      background:linear-gradient(90deg,#a78bfa,#60a5fa);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      user-select:none;
     }
-    .navlinks{
-      display:flex; gap:18px; flex-wrap:wrap;
-      font-size:14px; color:var(--muted);
+    .logo-icon{
+      width:2.5rem;height:2.5rem;
+      background:linear-gradient(90deg,var(--primary),var(--secondary));
+      border-radius:.6rem;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.25rem;color:#fff;
+      box-shadow:0 10px 25px -12px rgba(99,102,241,.6);
     }
-    .navlinks a:hover{color:var(--text)}
-    .hero{
-      padding:70px 0 40px;
+
+    nav{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;justify-content:center}
+    nav a{
+      color:var(--light);
+      text-decoration:none;
+      font-weight:500;
+      opacity:.9;
+      transition:all .2s ease;
+      position:relative;
+      padding:.25rem 0;
     }
-    .hero-grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:26px;
-      align-items:start;
+    nav a:hover{color:#a78bfa;opacity:1}
+    nav a.active{color:#a78bfa;opacity:1}
+    nav a.active::after{
+      content:"";
+      position:absolute;
+      left:0;right:0;bottom:-6px;
+      height:2px;border-radius:999px;
+      background:linear-gradient(90deg,#a78bfa,#60a5fa);
     }
-    .pill{
-      display:inline-flex; gap:8px; align-items:center;
-      padding:8px 12px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      color:var(--muted);
-      font-size:13px;
-      background: rgba(255,255,255,.03);
-    }
-    .dot{
-      width:9px; height:9px;
-      border-radius:99px;
-      background: var(--good);
-      box-shadow:0 0 18px rgba(60,242,163,.6);
-    }
-    h1{
-      font-size:48px;
-      line-height:1.08;
-      margin:16px 0 14px;
-      letter-spacing:-.6px;
-    }
-    .lead{
-      color:var(--muted);
-      font-size:16.5px;
-      margin:0 0 18px;
-      max-width:60ch;
-    }
-    .cta{
-      display:flex; gap:12px; flex-wrap:wrap;
-      margin-top:18px;
-    }
+
     .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:12px 16px;
-      border-radius:14px;
+      padding:.75rem 1.5rem;
+      border-radius:.9rem;
       font-weight:600;
-      font-size:14px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      transition:.18s ease;
+      cursor:pointer;
+      transition:all .25s ease;
+      border:none;
+      font-size:1rem;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.5rem;
+      white-space:nowrap;
     }
-    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.07)}
-    .btn.primary{
-      border: none;
-      background: linear-gradient(135deg, rgba(110,231,255,.9), rgba(60,242,163,.7));
-      color:#07101f;
-      box-shadow: 0 20px 50px rgba(0,0,0,.35);
+    .btn-primary{
+      background:linear-gradient(90deg,var(--primary),var(--secondary));
+      color:#fff;
     }
-    .card{
-      background: rgba(255,255,255,.04);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:16px;
-      box-shadow: 0 30px 80px rgba(0,0,0,.25);
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+
+    /* Hero */
+    .hero{padding:5rem 0 2.5rem;text-align:center}
+    .hero h1{font-size:3.5rem;font-weight:800;margin-bottom:1.5rem;line-height:1.1}
+    .hero h1 span{
+      background:linear-gradient(90deg,#a78bfa,#60a5fa);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
     }
-    .stat{
-      display:flex; justify-content:space-between; gap:10px;
-      padding:12px; border-radius:14px;
-      background: rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.08);
-      margin-bottom:12px;
-    }
-    .stat:last-child{margin-bottom:0}
-    .k{color:var(--muted); font-size:13px}
-    .v{font-weight:700}
-    .section{
-      padding:44px 0;
-    }
-    .section h2{
-      font-size:26px;
-      margin:0 0 10px;
-      letter-spacing:-.3px;
-    }
-    .section p{color:var(--muted); margin:0}
-    .grid3{
-      margin-top:18px;
+    .hero p{font-size:1.25rem;color:var(--gray);max-width:740px;margin:0 auto 2.5rem}
+    .hero-buttons{display:flex;justify-content:center;gap:1rem;margin-bottom:3rem;flex-wrap:wrap}
+    .btn-large{padding:1rem 2rem;font-size:1.125rem;border-radius:1rem}
+    .btn-success{background:linear-gradient(90deg,#10b981,#059669);color:#fff}
+    .btn-danger{background:linear-gradient(90deg,#ef4444,#dc2626);color:#fff}
+    .btn-outline{background:transparent;border:2px solid rgba(148,163,184,.45);color:var(--gray)}
+    .btn-outline:hover{border-color:#a78bfa;color:#a78bfa}
+
+    /* Stats */
+    .stats-grid{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:14px;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:1.5rem;
+      margin-bottom:3rem;
     }
-    .box{
-      padding:16px;
-      border-radius:18px;
-      background: rgba(255,255,255,.035);
-      border:1px solid var(--line);
+    .stat-card{
+      background:var(--card-bg);
+      backdrop-filter:blur(10px);
+      border:1px solid var(--border);
+      border-radius:1.25rem;
+      padding:1.5rem;
+      text-align:center;
     }
-    .box h3{margin:0 0 6px; font-size:16px}
-    .box p{margin:0; color:var(--muted); font-size:14px}
-    .hr{
-      height:1px; background: var(--line);
-      margin:30px 0;
+    .stat-value{font-size:1.75rem;font-weight:800;margin:.4rem 0}
+    .stat-label{color:var(--gray);font-size:.95rem}
+    .stat-icon{
+      width:3rem;height:3rem;border-radius:.85rem;
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 1rem;font-size:1.25rem;
     }
-    .list{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
+    .icon-green{background:rgba(16,185,129,.2);color:#10b981}
+    .icon-purple{background:rgba(139,92,246,.2);color:#8b5cf6}
+    .icon-blue{background:rgba(59,130,246,.2);color:#3b82f6}
+
+    /* Sections */
+    section[id]{scroll-margin-top:100px}
+
+    /* Dashboard */
+    .dashboard{display:grid;grid-template-columns:2fr 1fr;gap:2rem;margin-bottom:4rem}
+    .panel{
+      background:var(--card-bg);
+      backdrop-filter:blur(10px);
+      border:1px solid var(--border);
+      border-radius:1.5rem;
+      padding:2rem;
     }
-    .li{
-      display:flex; gap:10px; align-items:flex-start;
-      padding:12px 12px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      font-size:14px;
-      color:var(--muted);
+    .chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;gap:1rem;flex-wrap:wrap}
+    .chart-title{font-size:1.5rem;font-weight:800}
+    .chart-trend{display:flex;align-items:center;gap:.5rem;color:#10b981;font-weight:700}
+
+    .performance-chart{
+      height:16rem;
+      background:linear-gradient(90deg,rgba(139,92,246,.12),rgba(59,130,246,.12));
+      border-radius:1rem;
+      padding:1rem;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-around;
+      gap:.5rem;
+      overflow:hidden;
     }
-    .check{
-      margin-top:2px;
-      width:18px; height:18px; border-radius:6px;
-      background: rgba(110,231,255,.22);
-      border:1px solid rgba(110,231,255,.35);
-      display:flex; align-items:center; justify-content:center;
-      color:var(--accent); font-weight:900;
-      flex:0 0 auto;
+    .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:.5rem}
+    .chart-bar{
+      width:100%;
+      max-width:34px;
+      border-radius:.35rem .35rem 0 0;
+      background:linear-gradient(to top,#10b981,#059669);
+      transition:height 1s ease;
     }
-    footer{
-      padding:26px 0 40px;
-      border-top:1px solid var(--line);
-      color:var(--muted);
-      font-size:13px;
+    .bar-time{font-size:.75rem;color:rgba(226,232,240,.75)}
+
+    /* Positions */
+    .positions-title{font-size:1.5rem;font-weight:800;margin-bottom:1.25rem}
+    .position-item{background:rgba(30,41,59,.3);border-radius:.85rem;padding:1.25rem;margin-bottom:1rem}
+    .position-header{display:flex;justify-content:space-between;margin-bottom:.75rem;gap:1rem;align-items:center}
+    .position-symbol{font-weight:700;font-size:1.05rem}
+    .position-direction{
+      padding:.25rem .75rem;border-radius:9999px;font-size:.75rem;font-weight:800;letter-spacing:.4px
     }
-    .muted{color:var(--muted)}
-    .contact{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-      margin-top:16px;
+    .long{background:rgba(16,185,129,.2);color:#10b981}
+    .short{background:rgba(239,68,68,.2);color:#ef4444}
+    .position-details{display:flex;justify-content:space-between;color:var(--gray);font-size:.9rem;margin-bottom:.75rem;gap:1rem}
+    .position-pnl{display:flex;justify-content:space-between;align-items:center;margin-top:.5rem}
+    .pnl-positive{color:#10b981;font-weight:800}
+    .pnl-negative{color:#ef4444;font-weight:800}
+    .progress-bar{height:.5rem;width:4rem;background:rgba(148,163,184,.2);border-radius:9999px;overflow:hidden}
+    .progress-fill{height:100%;border-radius:9999px}
+    .progress-green{background:#10b981}
+    .progress-red{background:#ef4444}
+
+    /* Features */
+    .features{padding:5rem 0;background:rgba(15,23,42,.2)}
+    .section-header{text-align:center;margin-bottom:3rem}
+    .section-title{font-size:2.5rem;font-weight:900;margin-bottom:1rem}
+    .section-subtitle{font-size:1.25rem;color:var(--gray);max-width:720px;margin:0 auto}
+    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem}
+    .feature-card{
+      background:var(--card-bg);
+      backdrop-filter:blur(10px);
+      border:1px solid var(--border);
+      border-radius:1.5rem;
+      padding:2.5rem;
+      transition:all .25s ease;
     }
-    @media (max-width: 880px){
-      h1{font-size:38px}
-      .hero-grid{grid-template-columns:1fr}
-      .grid3{grid-template-columns:1fr}
-      .list{grid-template-columns:1fr}
-      .contact{grid-template-columns:1fr}
-      .navlinks{display:none}
+    .feature-card:hover{border-color:var(--border-strong);transform:translateY(-5px)}
+    .feature-icon{width:3.5rem;height:3.5rem;border-radius:1rem;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;font-size:1.5rem}
+    .feature-title{font-size:1.5rem;font-weight:800;margin-bottom:1rem}
+    .feature-desc{color:var(--gray);line-height:1.7}
+
+    /* Simple content sections */
+    .content-section{padding:4rem 0}
+    .content-card{
+      background:var(--card-bg);
+      border:1px solid var(--border);
+      border-radius:1.5rem;
+      padding:2rem;
+      backdrop-filter:blur(10px);
+    }
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+    .muted{color:var(--gray)}
+    .list{margin-top:1rem;display:grid;gap:.75rem}
+    .pill{
+      display:inline-flex;align-items:center;gap:.5rem;
+      padding:.5rem .75rem;border-radius:999px;
+      border:1px solid rgba(148,163,184,.25);
+      background:rgba(2,6,23,.25);
+      color:rgba(226,232,240,.85);
+      font-weight:600;
+      width:max-content;
+    }
+
+    /* CTA */
+    .cta{padding:5rem 0;text-align:center}
+    .cta-title{font-size:2.5rem;font-weight:900;margin-bottom:1.25rem}
+    .cta-subtitle{font-size:1.25rem;color:var(--gray);max-width:700px;margin:0 auto 2.5rem}
+    .cta-buttons{display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+
+    /* Footer */
+    footer{border-top:1px solid var(--border);padding:3rem 0}
+    .footer-content{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
+    .footer-logo{display:flex;align-items:center;gap:.75rem;font-size:1.25rem;font-weight:800}
+    .copyright{color:var(--gray);font-size:.9rem}
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .dashboard{grid-template-columns:1fr}
+      .grid-2{grid-template-columns:1fr}
+    }
+    @media (max-width: 768px){
+      .hero h1{font-size:2.5rem}
+      .header-content{flex-direction:column;gap:1rem}
+      nav{gap:1rem}
     }
   </style>
 </head>
 
 <body>
-<header>
-  <div class="container">
-    <div class="nav">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>
-          <div style="font-size:15px;">VR Quant Capital</div>
-          <div style="font-size:12px; color:var(--muted); font-weight:600;">Systematic Investment Research</div>
-        </div>
-      </div>
-
-      <nav class="navlinks">
-        <a href="#strategy">Strategy</a>
-        <a href="#risk">Risk</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-  </div>
-</header>
-
-<main>
-  <section class="hero">
+  <!-- Header -->
+  <header id="siteHeader">
     <div class="container">
-      <div class="hero-grid">
-        <div>
-          <div class="pill"><span class="dot"></span> Research-led systematic trading</div>
-          <h1>Quantitative strategies with disciplined risk management.</h1>
-          <p class="lead">
-            VR Quant Capital is a systematic investment firm focused on designing and operating
-            automated trading strategies across liquid markets. We combine rigorous research,
-            robust execution, and strict risk controls.
-          </p>
-
-          <div class="cta">
-            <a class="btn primary" href="#contact">Request information</a>
-            <a class="btn" href="#strategy">View approach</a>
-          </div>
-
-          <div class="hr"></div>
-
-          <div class="muted" style="font-size:13px;">
-            <b>Core principles:</b> Data-driven decisioning • Automation-first execution • Risk-first culture
-          </div>
+      <div class="header-content">
+        <div class="logo" aria-label="VRQuant Capital home">
+          <div class="logo-icon" aria-hidden="true"><i class="fas fa-bolt"></i></div>
+          VRQuant Capital
         </div>
 
-        <aside class="card">
-          <div class="stat">
-            <div class="k">Primary focus</div>
-            <div class="v">Quant Research</div>
-          </div>
-          <div class="stat">
-            <div class="k">Trading style</div>
-            <div class="v">Systematic</div>
-          </div>
-          <div class="stat">
-            <div class="k">Instruments</div>
-            <div class="v">Equities / Options</div>
-          </div>
-          <div class="stat">
-            <div class="k">Execution</div>
-            <div class="v">Automated + Controlled</div>
-          </div>
-          <div class="muted" style="font-size:12px; padding:6px 6px 0;">
-            * Website for informational purposes only.
-          </div>
-        </aside>
+        <nav aria-label="Primary navigation">
+          <a href="#dashboard" class="nav-link">Dashboard</a>
+          <a href="#strategies" class="nav-link">Strategies</a>
+          <a href="#performance" class="nav-link">Performance</a>
+          <a href="#about" class="nav-link">About</a>
+        </nav>
+
+        <button class="btn btn-primary" onclick="document.querySelector('#cta').scrollIntoView({behavior:'smooth'})">
+          Get Started
+        </button>
       </div>
     </div>
-  </section>
+  </header>
 
-  <section class="section" id="strategy">
+  <!-- Hero -->
+  <section class="hero" id="top">
     <div class="container">
-      <h2>Strategy</h2>
-      <p>
-        We pursue systematic strategies built on repeatable signals, continuous evaluation,
-        and robust portfolio construction.
-      </p>
+      <h1>Algorithmic Trading<br><span>Reimagined</span></h1>
+      <p>Harness the power of advanced algorithms and machine learning to execute trades with precision, speed, and consistency.</p>
 
-      <div class="grid3">
-        <div class="box">
-          <h3>Signal Research</h3>
-          <p>Alpha research using structured hypotheses, clean datasets, and statistically sound testing.</p>
+      <div class="hero-buttons">
+        <button id="startBtn" class="btn btn-large btn-success">
+          <i class="fas fa-play"></i> Start Live Demo
+        </button>
+        <button id="resetBtn" class="btn btn-large btn-outline">
+          <i class="fas fa-undo"></i> Reset Demo
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon icon-green"><i class="fas fa-dollar-sign"></i></div>
+          <div class="stat-value" id="portfolioValue">$1,250,000</div>
+          <div class="stat-label">Portfolio Value</div>
         </div>
-        <div class="box">
-          <h3>Execution Quality</h3>
-          <p>Automation with safeguards to control slippage, liquidity impact, and operational risks.</p>
+        <div class="stat-card">
+          <div class="stat-icon icon-green"><i class="fas fa-chart-line"></i></div>
+          <div class="stat-value" id="dailyPnL">+$42,350</div>
+          <div class="stat-label">Today's P&L</div>
         </div>
-        <div class="box">
-          <h3>Portfolio Design</h3>
-          <p>Position sizing and diversification designed to target favorable risk-adjusted outcomes.</p>
+        <div class="stat-card">
+          <div class="stat-icon icon-purple"><i class="fas fa-chart-bar"></i></div>
+          <div class="stat-value">8</div>
+          <div class="stat-label">Active Strategies</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-blue"><i class="fas fa-users"></i></div>
+          <div class="stat-value">24</div>
+          <div class="stat-label">Trading Pairs</div>
         </div>
       </div>
 
-      <div class="list">
-        <div class="li"><div class="check">✓</div> Market regime awareness and adaptive constraints</div>
-        <div class="li"><div class="check">✓</div> Defined risk limits and drawdown controls</div>
-        <div class="li"><div class="check">✓</div> Continuous monitoring and performance analytics</div>
-        <div class="li"><div class="check">✓</div> Robust testing against overfitting risk</div>
-      </div>
-    </div>
-  </section>
+      <!-- Dashboard -->
+      <div class="dashboard" id="dashboard">
+        <div class="panel">
+          <div class="chart-header">
+            <div class="chart-title">Real-time Performance</div>
+            <div class="chart-trend"><i class="fas fa-chart-line"></i> <span id="trendText">+8.9% Today</span></div>
+          </div>
 
-  <section class="section" id="risk">
-    <div class="container">
-      <h2>Risk Management</h2>
-      <p>
-        Risk is treated as a first-class design constraint.
-        We emphasize capital preservation and systematic controls over discretionary decisions.
-      </p>
+          <div class="performance-chart" id="performanceChart" aria-label="Performance chart">
+            <!-- Chart bars generated by JS -->
+          </div>
+        </div>
 
-      <div class="grid3">
-        <div class="box">
-          <h3>Position Limits</h3>
-          <p>Exposure caps by instrument, sector, and portfolio concentration.</p>
-        </div>
-        <div class="box">
-          <h3>Stress Testing</h3>
-          <p>Scenario analysis across volatility spikes, gaps, and liquidity constraints.</p>
-        </div>
-        <div class="box">
-          <h3>Operational Controls</h3>
-          <p>Audit trails, monitoring alerts, and defined shutdown procedures.</p>
+        <div class="panel">
+          <div class="positions-title">Active Positions</div>
+          <div id="positionsList">
+            <!-- Positions generated by JS -->
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="about">
+  <!-- Strategies (added so nav works) -->
+  <section class="content-section" id="strategies">
     <div class="container">
-      <h2>About VR Quant Capital</h2>
-      <p>
-        We build systematic strategies grounded in disciplined research, engineering quality,
-        and scalable infrastructure. Our long-term objective is consistent compounding with controlled risk.
-      </p>
+      <div class="content-card">
+        <h2 class="section-title" style="text-align:left;margin-bottom:.5rem;">Strategies</h2>
+        <p class="muted">A diversified suite of systematic strategies designed for different market regimes.</p>
 
-      <div class="contact" style="margin-top:18px;">
-        <div class="box">
-          <h3>Investment Philosophy</h3>
-          <p>Build repeatable systems, manage downside, and prioritize process over prediction.</p>
-        </div>
-        <div class="box">
-          <h3>Infrastructure</h3>
-          <p>Version control, data integrity, and automated deployment to reduce operational errors.</p>
+        <div class="grid-2" style="margin-top:1.5rem;">
+          <div>
+            <div class="pill"><i class="fas fa-wave-square"></i> Momentum</div>
+            <div class="pill"><i class="fas fa-arrows-rotate"></i> Mean Reversion</div>
+            <div class="pill"><i class="fas fa-bolt"></i> Volatility Breakout</div>
+            <div class="pill"><i class="fas fa-layer-group"></i> Multi-Asset Rotation</div>
+          </div>
+          <div class="muted">
+            <div class="list">
+              <div>• Risk controls: max drawdown guardrails, position limits, and circuit breakers.</div>
+              <div>• Execution: slippage-aware routing and time-weighted order slicing.</div>
+              <div>• Monitoring: 24/7 anomaly alerts and automated de-risking.</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="contact">
+  <!-- Performance (added so nav works) -->
+  <section class="content-section" id="performance">
     <div class="container">
-      <h2>Contact</h2>
-      <p>
-        For general inquiries, please reach out below.
-      </p>
-
-      <div class="contact">
-        <div class="box">
-          <h3>Email</h3>
-          <p class="muted">contact@vrquantcapital.com</p>
-          <p style="margin-top:10px;"><a class="btn" href="mailto:contact@vrquantcapital.com">Send email</a></p>
+      <div class="content-card">
+        <h2 class="section-title" style="text-align:left;margin-bottom:.5rem;">Performance</h2>
+        <p class="muted">Transparent reporting with risk metrics and attribution by strategy.</p>
+        <div class="grid-2" style="margin-top:1.5rem;">
+          <div class="stat-card" style="text-align:left;">
+            <div class="stat-label">Sharpe (simulated)</div>
+            <div class="stat-value">1.8</div>
+            <div class="muted">Risk-adjusted returns focus</div>
+          </div>
+          <div class="stat-card" style="text-align:left;">
+            <div class="stat-label">Max Drawdown (simulated)</div>
+            <div class="stat-value">-6.2%</div>
+            <div class="muted">Tight downside control</div>
+          </div>
         </div>
-
-        <div class="box">
-          <h3>Location</h3>
-          <p class="muted">United States</p>
-          <p style="margin-top:10px; font-size:13px; color:var(--muted);">
-            (You can update this later once you register business/office address.)
-          </p>
-        </div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="muted" style="font-size:12px;">
-        <b>Disclaimer:</b> This website is provided for informational purposes only and does not constitute an offer to sell
-        or a solicitation of an offer to buy any securities. Past performance is not indicative of future results.
+        <p class="muted" style="margin-top:1rem;font-size:.95rem;">
+          *Demo numbers for UI illustration. Replace with your real stats anytime.
+        </p>
       </div>
     </div>
   </section>
-</main>
 
-<footer>
-  <div class="container">
-    © <span id="year"></span> VR Quant Capital. All rights reserved.
-  </div>
-</footer>
+  <!-- About (added so nav works) -->
+  <section class="content-section" id="about">
+    <div class="container">
+      <div class="content-card">
+        <h2 class="section-title" style="text-align:left;margin-bottom:.5rem;">About</h2>
+        <p class="muted">
+          VRQuant Capital is built for traders who want institutional-style automation with modern UX.
+          Plug in strategies, monitor risk, and scale across markets.
+        </p>
+      </div>
+    </div>
+  </section>
 
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+  <!-- Features -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Why Choose VRQuant Capital?</h2>
+        <p class="section-subtitle">Our platform combines cutting-edge technology with institutional-grade infrastructure</p>
+      </div>
 
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(139,92,246,.2);color:#8b5cf6;">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3 class="feature-title">Institutional Security</h3>
+          <p class="feature-desc">Enterprise-grade security protocols, cold storage, and multi-signature wallets protect your assets at all times.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(59,130,246,.2);color:#3b82f6;">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h3 class="feature-title">Ultra-Fast Execution</h3>
+          <p class="feature-desc">Sub-millisecond order execution with direct market access and co-located servers worldwide.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(16,185,129,.2);color:#10b981;">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3 class="feature-title">24/7 Monitoring</h3>
+          <p class="feature-desc">Continuous monitoring and automatic risk management ensure your strategies perform optimally around the clock.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="cta">
+    <div class="container">
+      <h2 class="cta-title">Ready to Start Your Algo Trading Journey?</h2>
+      <p class="cta-subtitle">Join thousands of traders who are already using VRQuant Capital to automate their trading strategies</p>
+
+      <div class="cta-buttons">
+        <button class="btn btn-large btn-primary">
+          Create Free Account <i class="fas fa-arrow-right"></i>
+        </button>
+        <button class="btn btn-large btn-outline">
+          View Documentation
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+          VRQuant Capital
+        </div>
+        <div class="copyright">&copy; 2026 VRQuant Capital. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ====== State ======
+    let portfolioValue = 1250000;
+    let dailyPnL = 42350;
+    let isRunning = false;
+    let intervalId = null;
+
+    // ====== DOM ======
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const portfolioValueEl = document.getElementById('portfolioValue');
+    const dailyPnLEl = document.getElementById('dailyPnL');
+    const performanceChart = document.getElementById('performanceChart');
+    const positionsList = document.getElementById('positionsList');
+    const header = document.getElementById('siteHeader');
+    const trendText = document.getElementById('trendText');
+
+    // ====== Data ======
+    const performanceData = [
+      { time: '09:00', value: 100 },
+      { time: '10:00', value: 102 },
+      { time: '11:00', value: 101 },
+      { time: '12:00', value: 105 },
+      { time: '13:00', value: 103 },
+      { time: '14:00', value: 107 },
+      { time: '15:00', value: 106 },
+      { time: '16:00', value: 109 },
+    ];
+
+    const activePositions = [
+      { symbol: 'BTC/USD', direction: 'long', entry: 42350, current: 43120, pnl: 1.82 },
+      { symbol: 'ETH/USD', direction: 'short', entry: 2850, current: 2790, pnl: 2.11 },
+      { symbol: 'SOL/USD', direction: 'long', entry: 98.5, current: 102.3, pnl: 3.86 },
+      { symbol: 'AAPL', direction: 'long', entry: 182.5, current: 185.2, pnl: 1.48 },
+    ];
+
+    // ====== Helpers ======
+    function formatMoney(n){
+      const sign = n < 0 ? '-' : '';
+      const abs = Math.abs(n);
+      return sign + '$' + abs.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    }
+
+    function updateStats(){
+      portfolioValueEl.textContent = formatMoney(portfolioValue);
+      dailyPnLEl.textContent = (dailyPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(dailyPnL));
+      dailyPnLEl.style.color = dailyPnL >= 0 ? '#10b981' : '#ef4444';
+    }
+
+    // Normalize chart values so bars always fit inside (no 120% overflow)
+    function renderChart(){
+      performanceChart.innerHTML = '';
+
+      const values = performanceData.map(p => p.value);
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const range = Math.max(1, max - min);
+
+      performanceData.forEach(point => {
+        const wrap = document.createElement('div');
+        wrap.className = 'bar-wrap';
+
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+
+        // map to 20%..100% height
+        const normalized = 20 + ((point.value - min) / range) * 80;
+        bar.style.height = normalized + '%';
+
+        const time = document.createElement('div');
+        time.className = 'bar-time';
+        time.textContent = point.time;
+
+        wrap.appendChild(bar);
+        wrap.appendChild(time);
+        performanceChart.appendChild(wrap);
+      });
+    }
+
+    function renderPositions(){
+      positionsList.innerHTML = '';
+      activePositions.forEach(position => {
+        const positionEl = document.createElement('div');
+        positionEl.className = 'position-item';
+
+        const isLong = position.direction === 'long';
+        const pnlClass = position.pnl >= 0 ? 'pnl-positive' : 'pnl-negative';
+        const progressClass = position.pnl >= 0 ? 'progress-green' : 'progress-red';
+        const progressWidth = Math.min(Math.abs(position.pnl) * 10, 100);
+
+        positionEl.innerHTML = `
+          <div class="position-header">
+            <div class="position-symbol">${position.symbol}</div>
+            <div class="position-direction ${isLong ? 'long' : 'short'}">${position.direction.toUpperCase()}</div>
+          </div>
+          <div class="position-details">
+            <span>Entry: $${position.entry}</span>
+            <span>Current: $${position.current}</span>
+          </div>
+          <div class="position-pnl">
+            <span class="${pnlClass}">${position.pnl >= 0 ? '+' : ''}${position.pnl}%</span>
+            <div class="progress-bar">
+              <div class="progress-fill ${progressClass}" style="width:${progressWidth}%"></div>
+            </div>
+          </div>
+        `;
+        positionsList.appendChild(positionEl);
+      });
+    }
+
+    // ====== Trading Simulation ======
+    function toggleTrading(){
+      if (isRunning){
+        clearInterval(intervalId);
+        startBtn.innerHTML = '<i class="fas fa-play"></i> Start Live Demo';
+        startBtn.className = 'btn btn-large btn-success';
+        isRunning = false;
+        return;
+      }
+
+      intervalId = setInterval(() => {
+        portfolioValue += (Math.random() - 0.5) * 2000;
+        dailyPnL += (Math.random() - 0.5) * 500;
+        updateStats();
+
+        // update chart points slightly
+        performanceData.forEach(p => {
+          p.value = Math.max(80, Math.min(120, p.value + (Math.random() - 0.5) * 5));
+        });
+        renderChart();
+
+        // update trend text loosely based on pnl
+        const pct = (dailyPnL / 475000) * 100; // just for demo display
+        trendText.textContent = `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}% Today`;
+      }, 2000);
+
+      startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause Trading';
+      startBtn.className = 'btn btn-large btn-danger';
+      isRunning = true;
+    }
+
+    function resetDemo(){
+      portfolioValue = 1250000;
+      dailyPnL = 42350;
+
+      // reset chart
+      const defaults = [100,102,101,105,103,107,106,109];
+      performanceData.forEach((p,i)=>p.value = defaults[i]);
+
+      updateStats();
+      renderChart();
+      renderPositions();
+
+      if (isRunning) toggleTrading();
+    }
+
+    // ====== Header + Active nav ======
+    function onScroll(){
+      header.classList.toggle('scrolled', window.scrollY > 10);
+
+      // active nav highlight
+      const sections = ['dashboard','strategies','performance','about'];
+      let current = 'dashboard';
+      for (const id of sections){
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= 140) current = id;
+      }
+      document.querySelectorAll('.nav-link').forEach(a=>{
+        const href = a.getAttribute('href') || '';
+        a.classList.toggle('active', href === `#${current}`);
+      });
+    }
+
+    // ====== Init ======
+    startBtn.addEventListener('click', toggleTrading);
+    resetBtn.addEventListener('click', resetDemo);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('load', () => {
+      updateStats();
+      renderChart();
+      renderPositions();
+      onScroll();
+    });
+  </script>
 </body>
 </html>
