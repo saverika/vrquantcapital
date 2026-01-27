@@ -3,473 +3,1001 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VRQuant Capital - Algorithmic Trading Platform</title>
+  <title>VRQuant Capital | Advanced Quantitative Investment Strategies</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Optional security hardening for a static site (safe to keep on GitHub Pages) -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' https:;
+                 img-src 'self' https: data:;
+                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                 font-src https://fonts.gstatic.com;
+                 script-src 'self' 'unsafe-inline' https:;">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet" />
 
   <style>
-    :root{
-      --primary:#8b5cf6;
-      --secondary:#3b82f6;
-      --success:#10b981;
-      --danger:#ef4444;
-      --dark:#0f172a;
-      --darker:#020617;
-      --light:#f8fafc;
-      --gray:#94a3b8;
-      --card-bg:rgba(30,41,59,.5);
-      --border:rgba(139,92,246,.2);
-      --border-strong:rgba(139,92,246,.4);
-      --shadow:0 12px 30px -12px rgba(139,92,246,.35);
+    :root {
+      --primary-dark: #0a0e17;
+      --secondary-dark: #131a29;
+      --accent-teal: #00c896;
+      --accent-blue: #4da6ff;
+      --text-primary: #ffffff;
+      --text-secondary: #a0aec0;
+      --text-dark: #1a202c;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
-    *{margin:0;padding:0;box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
-      background:linear-gradient(135deg,var(--darker),#4c1d95,var(--darker));
-      color:var(--light);
-      min-height:100vh;
-      line-height:1.6;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--primary-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 2rem}
+
+    h1, h2, h3, h4, h5 {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
 
     /* Header */
-    header{
-      position:sticky;
-      top:0;
-      z-index:50;
-      border-bottom:1px solid var(--border);
-      padding:1rem 0;
-      backdrop-filter:saturate(180%) blur(12px);
-      background:rgba(2,6,23,.25);
-      transition:all .25s ease;
-    }
-    header.scrolled{
-      background:rgba(2,6,23,.55);
-      border-bottom:1px solid var(--border-strong);
-      box-shadow:var(--shadow);
-    }
-    .header-content{display:flex;justify-content:space-between;align-items:center;gap:1rem}
-
-    .logo{
-      display:flex;align-items:center;gap:.75rem;
-      font-size:1.5rem;font-weight:800;
-      background:linear-gradient(90deg,#a78bfa,#60a5fa);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      user-select:none;
-    }
-    .logo-icon{
-      width:2.5rem;height:2.5rem;
-      background:linear-gradient(90deg,var(--primary),var(--secondary));
-      border-radius:.6rem;
-      display:flex;align-items:center;justify-content:center;
-      font-size:1.25rem;color:#fff;
-      box-shadow:0 10px 25px -12px rgba(99,102,241,.6);
+    header {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 20px 0;
+      transition: var(--transition);
     }
 
-    nav{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;justify-content:center}
-    nav a{
-      color:var(--light);
-      text-decoration:none;
-      font-weight:500;
-      opacity:.9;
-      transition:all .2s ease;
-      position:relative;
-      padding:.25rem 0;
-    }
-    nav a:hover{color:#a78bfa;opacity:1}
-    nav a.active{color:#a78bfa;opacity:1}
-    nav a.active::after{
-      content:"";
-      position:absolute;
-      left:0;right:0;bottom:-6px;
-      height:2px;border-radius:999px;
-      background:linear-gradient(90deg,#a78bfa,#60a5fa);
+    header.scrolled {
+      background: rgba(10, 14, 23, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--box-shadow);
+      padding: 15px 0;
     }
 
-    .btn{
-      padding:.75rem 1.5rem;
-      border-radius:.9rem;
-      font-weight:600;
-      cursor:pointer;
-      transition:all .25s ease;
-      border:none;
-      font-size:1rem;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:.5rem;
-      white-space:nowrap;
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .btn-primary{
-      background:linear-gradient(90deg,var(--primary),var(--secondary));
-      color:#fff;
+
+    .logo {
+      font-family: 'Manrope', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(45deg, var(--accent-teal), var(--accent-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
     }
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+
+    .logo::before {
+      content: "";
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+      margin-right: 10px;
+      flex: 0 0 auto;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+
+    nav ul li { margin-left: 40px; }
+
+    nav ul li a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      position: relative;
+      padding: 5px 0;
+      transition: var(--transition);
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active { color: var(--accent-teal); }
+
+    nav ul li a::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent-teal);
+      transition: var(--transition);
+    }
+
+    nav ul li a:hover::after,
+    nav ul li a.active::after { width: 100%; }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 24px;
+      cursor: pointer;
+    }
 
     /* Hero */
-    .hero{padding:5rem 0 2.5rem;text-align:center}
-    .hero h1{font-size:3.5rem;font-weight:800;margin-bottom:1.5rem;line-height:1.1}
-    .hero h1 span{
-      background:linear-gradient(90deg,#a78bfa,#60a5fa);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 100px 0 0;
     }
-    .hero p{font-size:1.25rem;color:var(--gray);max-width:740px;margin:0 auto 2.5rem}
-    .hero-buttons{display:flex;justify-content:center;gap:1rem;margin-bottom:3rem;flex-wrap:wrap}
-    .btn-large{padding:1rem 2rem;font-size:1.125rem;border-radius:1rem}
-    .btn-success{background:linear-gradient(90deg,#10b981,#059669);color:#fff}
-    .btn-danger{background:linear-gradient(90deg,#ef4444,#dc2626);color:#fff}
-    .btn-outline{background:transparent;border:2px solid rgba(148,163,184,.45);color:var(--gray)}
-    .btn-outline:hover{border-color:#a78bfa;color:#a78bfa}
 
-    /* Stats */
-    .stats-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:1.5rem;
-      margin-bottom:3rem;
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(13, 28, 51, 0.8) 0%, rgba(10, 14, 23, 1) 70%);
+      z-index: -1;
     }
-    .stat-card{
-      background:var(--card-bg);
-      backdrop-filter:blur(10px);
-      border:1px solid var(--border);
-      border-radius:1.25rem;
-      padding:1.5rem;
-      text-align:center;
-    }
-    .stat-value{font-size:1.75rem;font-weight:800;margin:.4rem 0}
-    .stat-label{color:var(--gray);font-size:.95rem}
-    .stat-icon{
-      width:3rem;height:3rem;border-radius:.85rem;
-      display:flex;align-items:center;justify-content:center;
-      margin:0 auto 1rem;font-size:1.25rem;
-    }
-    .icon-green{background:rgba(16,185,129,.2);color:#10b981}
-    .icon-purple{background:rgba(139,92,246,.2);color:#8b5cf6}
-    .icon-blue{background:rgba(59,130,246,.2);color:#3b82f6}
 
-    /* Sections */
-    section[id]{scroll-margin-top:100px}
+    .hero-content { max-width: 650px; z-index: 2; }
 
-    /* Dashboard */
-    .dashboard{display:grid;grid-template-columns:2fr 1fr;gap:2rem;margin-bottom:4rem}
-    .panel{
-      background:var(--card-bg);
-      backdrop-filter:blur(10px);
-      border:1px solid var(--border);
-      border-radius:1.5rem;
-      padding:2rem;
+    .hero h1 {
+      font-size: 56px;
+      margin-bottom: 24px;
+      background: linear-gradient(45deg, var(--text-primary), var(--accent-teal));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
-    .chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;gap:1rem;flex-wrap:wrap}
-    .chart-title{font-size:1.5rem;font-weight:800}
-    .chart-trend{display:flex;align-items:center;gap:.5rem;color:#10b981;font-weight:700}
 
-    .performance-chart{
-      height:16rem;
-      background:linear-gradient(90deg,rgba(139,92,246,.12),rgba(59,130,246,.12));
-      border-radius:1rem;
-      padding:1rem;
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-around;
-      gap:.5rem;
-      overflow:hidden;
+    .hero p {
+      font-size: 20px;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+      max-width: 600px;
     }
-    .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:.5rem}
-    .chart-bar{
-      width:100%;
-      max-width:34px;
-      border-radius:.35rem .35rem 0 0;
-      background:linear-gradient(to top,#10b981,#059669);
-      transition:height 1s ease;
-    }
-    .bar-time{font-size:.75rem;color:rgba(226,232,240,.75)}
 
-    /* Positions */
-    .positions-title{font-size:1.5rem;font-weight:800;margin-bottom:1.25rem}
-    .position-item{background:rgba(30,41,59,.3);border-radius:.85rem;padding:1.25rem;margin-bottom:1rem}
-    .position-header{display:flex;justify-content:space-between;margin-bottom:.75rem;gap:1rem;align-items:center}
-    .position-symbol{font-weight:700;font-size:1.05rem}
-    .position-direction{
-      padding:.25rem .75rem;border-radius:9999px;font-size:.75rem;font-weight:800;letter-spacing:.4px
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
     }
-    .long{background:rgba(16,185,129,.2);color:#10b981}
-    .short{background:rgba(239,68,68,.2);color:#ef4444}
-    .position-details{display:flex;justify-content:space-between;color:var(--gray);font-size:.9rem;margin-bottom:.75rem;gap:1rem}
-    .position-pnl{display:flex;justify-content:space-between;align-items:center;margin-top:.5rem}
-    .pnl-positive{color:#10b981;font-weight:800}
-    .pnl-negative{color:#ef4444;font-weight:800}
-    .progress-bar{height:.5rem;width:4rem;background:rgba(148,163,184,.2);border-radius:9999px;overflow:hidden}
-    .progress-fill{height:100%;border-radius:9999px}
-    .progress-green{background:#10b981}
-    .progress-red{background:#ef4444}
+
+    .btn {
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, var(--accent-teal), var(--accent-blue));
+      color: white;
+      box-shadow: 0 5px 20px rgba(0, 200, 150, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 200, 150, 0.6);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid var(--accent-teal);
+      color: var(--accent-teal);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 200, 150, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .hero-image {
+      position: absolute;
+      right: -100px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60%;
+      max-width: 900px;
+      z-index: 1;
+      opacity: 0.7;
+    }
+
+    .hero-image::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, var(--accent-teal), var(--accent-blue));
+      opacity: 0.15;
+      z-index: -1;
+      border-radius: var(--border-radius);
+      filter: blur(20px);
+    }
 
     /* Features */
-    .features{padding:5rem 0;background:rgba(15,23,42,.2)}
-    .section-header{text-align:center;margin-bottom:3rem}
-    .section-title{font-size:2.5rem;font-weight:900;margin-bottom:1rem}
-    .section-subtitle{font-size:1.25rem;color:var(--gray);max-width:720px;margin:0 auto}
-    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem}
-    .feature-card{
-      background:var(--card-bg);
-      backdrop-filter:blur(10px);
-      border:1px solid var(--border);
-      border-radius:1.5rem;
-      padding:2.5rem;
-      transition:all .25s ease;
+    .features {
+      padding: 100px 0;
+      background: linear-gradient(to bottom, var(--primary-dark) 0%, var(--secondary-dark) 100%);
     }
-    .feature-card:hover{border-color:var(--border-strong);transform:translateY(-5px)}
-    .feature-icon{width:3.5rem;height:3.5rem;border-radius:1rem;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;font-size:1.5rem}
-    .feature-title{font-size:1.5rem;font-weight:800;margin-bottom:1rem}
-    .feature-desc{color:var(--gray);line-height:1.7}
 
-    /* Simple content sections */
-    .content-section{padding:4rem 0}
-    .content-card{
-      background:var(--card-bg);
-      border:1px solid var(--border);
-      border-radius:1.5rem;
-      padding:2rem;
-      backdrop-filter:blur(10px);
+    .section-title {
+      text-align: center;
+      margin-bottom: 70px;
     }
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
-    .muted{color:var(--gray)}
-    .list{margin-top:1rem;display:grid;gap:.75rem}
-    .pill{
-      display:inline-flex;align-items:center;gap:.5rem;
-      padding:.5rem .75rem;border-radius:999px;
-      border:1px solid rgba(148,163,184,.25);
-      background:rgba(2,6,23,.25);
-      color:rgba(226,232,240,.85);
-      font-weight:600;
-      width:max-content;
+
+    .section-title h2 {
+      font-size: 42px;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, var(--text-primary), var(--accent-teal));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .section-title p {
+      color: var(--text-secondary);
+      max-width: 650px;
+      margin: 0 auto;
+      font-size: 18px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .feature-card {
+      background: rgba(25, 35, 55, 0.7);
+      border-radius: var(--border-radius);
+      padding: 35px 30px;
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 200, 150, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 200, 150, 0.1) 0%, transparent 70%);
+      z-index: -1;
+      transition: var(--transition);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(0, 200, 150, 0.3);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .feature-card:hover::before { transform: scale(1.2); }
+
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      background: rgba(0, 200, 150, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      font-size: 28px;
+      color: var(--accent-teal);
+      border: 1px solid rgba(0, 200, 150, 0.3);
+    }
+
+    .feature-card h3 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
+    /* Performance */
+    .performance {
+      padding: 100px 0;
+      background: var(--primary-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .performance::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at top right, rgba(77, 166, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at bottom left, rgba(0, 200, 150, 0.08) 0%, transparent 40%);
+      z-index: -1;
+    }
+
+    .performance-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .performance-content h2 {
+      font-size: 42px;
+      margin-bottom: 30px;
+    }
+
+    .performance-content p {
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+      font-size: 18px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 25px;
+      background: rgba(25, 35, 55, 0.5);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-number {
+      font-size: 36px;
+      font-weight: 700;
+      margin: 10px 0;
+      background: linear-gradient(45deg, var(--accent-teal), var(--accent-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
+    .chart-container {
+      background: rgba(25, 35, 55, 0.5);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-container::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .chart-title { font-size: 20px; font-weight: 600; }
+
+    .chart-period {
+      background: rgba(0, 200, 150, 0.1);
+      color: var(--accent-teal);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .chart-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      height: 250px;
+      justify-content: flex-end;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: flex-end;
+      height: 100%;
+      gap: 10px;
+    }
+
+    .bar {
+      flex: 1;
+      background: linear-gradient(to top, var(--accent-teal), var(--accent-blue));
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      min-width: 20px;
+      transition: var(--transition);
+    }
+
+    .bar:hover { filter: brightness(1.2); }
+
+    .bar-value {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--accent-teal);
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    /* FIX: label row styling (your original HTML had labels but no CSS for them) */
+    .bar-labels{
+      display:flex;
+      justify-content:space-between;
+      margin-top:10px;
+      padding:0 8px;
+      gap: 10px;
+    }
+    .bar-labels .bar-label{
+      position:static;
+      transform:none;
+      display:block;
+      color:var(--text-secondary);
+      font-size:14px;
+      flex: 1;
+      text-align:center;
+      white-space: nowrap;
+    }
+
+    /* Strategies */
+    .strategies {
+      padding: 100px 0;
+      background: linear-gradient(to bottom, var(--secondary-dark) 0%, var(--primary-dark) 100%);
+    }
+
+    .strategies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 35px;
+      margin-top: 50px;
+    }
+
+    .strategy-card {
+      background: rgba(25, 35, 55, 0.7);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .strategy-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      border-color: rgba(0, 200, 150, 0.3);
+    }
+
+    .strategy-header {
+      padding: 25px;
+      background: rgba(0, 30, 40, 0.7);
+      border-bottom: 1px solid rgba(0, 200, 150, 0.2);
+    }
+
+    .strategy-header h3 {
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+    }
+
+    .strategy-header h3::before {
+      content: "★";
+      margin-right: 12px;
+      color: var(--accent-teal);
+      font-size: 20px;
+    }
+
+    .strategy-content { padding: 30px; }
+
+    .strategy-content p {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .strategy-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .stat-box {
+      background: rgba(0, 30, 40, 0.5);
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-box .value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-teal);
+      margin: 5px 0;
+    }
+
+    .stat-box .label {
+      color: var(--text-secondary);
+      font-size: 14px;
     }
 
     /* CTA */
-    .cta{padding:5rem 0;text-align:center}
-    .cta-title{font-size:2.5rem;font-weight:900;margin-bottom:1.25rem}
-    .cta-subtitle{font-size:1.25rem;color:var(--gray);max-width:700px;margin:0 auto 2.5rem}
-    .cta-buttons{display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+    .cta-section {
+      padding: 100px 0;
+      text-align: center;
+      background:
+        linear-gradient(rgba(10, 14, 23, 0.9), rgba(19, 26, 41, 0.95)),
+        url('https://images.unsplash.com/photo-1561070791519-389dc0dd96bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .cta-section::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, var(--secondary-dark), var(--primary-dark));
+      opacity: 0.9;
+    }
+
+    .cta-content {
+      max-width: 750px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-content h2 {
+      font-size: 48px;
+      margin-bottom: 25px;
+    }
+
+    .cta-content p {
+      font-size: 20px;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+    }
 
     /* Footer */
-    footer{border-top:1px solid var(--border);padding:3rem 0}
-    .footer-content{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
-    .footer-logo{display:flex;align-items:center;gap:.75rem;font-size:1.25rem;font-weight:800}
-    .copyright{color:var(--gray);font-size:.9rem}
+    footer {
+      background: var(--secondary-dark);
+      padding: 70px 0 30px;
+      position: relative;
+    }
+
+    footer::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-top: 40px;
+    }
+
+    .footer-col h3 {
+      font-size: 22px;
+      margin-bottom: 25px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-col h3::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--accent-teal);
+    }
+
+    .footer-col p {
+      color: var(--text-secondary);
+      margin: 15px 0;
+      font-size: 16px;
+    }
+
+    .footer-links {
+      list-style: none;
+      margin-top: 20px;
+    }
+
+    .footer-links li { margin-bottom: 12px; }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+      display: block;
+      padding: 5px 0;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-teal);
+      transform: translateX(5px);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 40px;
+      margin-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
 
     /* Responsive */
-    @media (max-width: 900px){
-      .dashboard{grid-template-columns:1fr}
-      .grid-2{grid-template-columns:1fr}
+    @media (max-width: 992px) {
+      .performance-container { grid-template-columns: 1fr; gap: 40px; }
+      .hero h1 { font-size: 48px; }
+      .hero p { font-size: 18px; }
+      .cta-content h2 { font-size: 42px; }
     }
-    @media (max-width: 768px){
-      .hero h1{font-size:2.5rem}
-      .header-content{flex-direction:column;gap:1rem}
-      nav{gap:1rem}
+
+    @media (max-width: 768px) {
+      .mobile-menu-btn { display: block; }
+
+      nav ul {
+        position: fixed;
+        top: 80px;
+        right: -100%;
+        flex-direction: column;
+        background: var(--secondary-dark);
+        width: 80%;
+        height: calc(100vh - 80px);
+        padding: 40px;
+        transition: var(--transition);
+        box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+        border-left: 1px solid rgba(0, 200, 150, 0.2);
+      }
+
+      nav ul.active { right: 0; }
+
+      nav ul li { margin: 0 0 25px 0; }
+
+      .hero { text-align: center; padding-top: 120px; }
+      .hero-content { max-width: 100%; }
+      .hero h1 { font-size: 40px; }
+      .hero p { font-size: 17px; margin: 0 auto 30px; }
+
+      .cta-buttons { flex-direction: column; gap: 15px; }
+      .hero-image { display: none; }
+
+      .chart-bars { height: 200px; }
+      .section-title h2 { font-size: 36px; }
+
+      .bar-labels { padding: 0; }
+      .bar-labels .bar-label { font-size: 12px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 36px; }
+      .section-title h2 { font-size: 32px; }
+      .btn { width: 100%; padding: 14px; }
+      .cta-content h2 { font-size: 36px; }
+      .stat-number { font-size: 28px; }
+      .logo { font-size: 24px; }
+      .logo::before { width: 10px; height: 10px; }
     }
   </style>
 </head>
 
 <body>
   <!-- Header -->
-  <header id="siteHeader">
-    <div class="container">
-      <div class="header-content">
-        <div class="logo" aria-label="VRQuant Capital home">
-          <div class="logo-icon" aria-hidden="true"><i class="fas fa-bolt"></i></div>
-          VRQuant Capital
-        </div>
-
-        <nav aria-label="Primary navigation">
-          <a href="#dashboard" class="nav-link">Dashboard</a>
-          <a href="#strategies" class="nav-link">Strategies</a>
-          <a href="#performance" class="nav-link">Performance</a>
-          <a href="#about" class="nav-link">About</a>
-        </nav>
-
-        <button class="btn btn-primary" onclick="document.querySelector('#cta').scrollIntoView({behavior:'smooth'})">
-          Get Started
-        </button>
-      </div>
+  <header>
+    <div class="container header-container">
+      <div class="logo">VRQuant Capital</div>
+      <button class="mobile-menu-btn" aria-label="Open menu">☰</button>
+      <nav>
+        <ul>
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#strategies">Strategies</a></li>
+          <li><a href="#performance">Performance</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
   <!-- Hero -->
-  <section class="hero" id="top">
+  <section class="hero" id="home">
     <div class="container">
-      <h1>Algorithmic Trading<br><span>Reimagined</span></h1>
-      <p>Harness the power of advanced algorithms and machine learning to execute trades with precision, speed, and consistency.</p>
-
-      <div class="hero-buttons">
-        <button id="startBtn" class="btn btn-large btn-success">
-          <i class="fas fa-play"></i> Start Live Demo
-        </button>
-        <button id="resetBtn" class="btn btn-large btn-outline">
-          <i class="fas fa-undo"></i> Reset Demo
-        </button>
-      </div>
-
-      <!-- Stats -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon icon-green"><i class="fas fa-dollar-sign"></i></div>
-          <div class="stat-value" id="portfolioValue">$1,250,000</div>
-          <div class="stat-label">Portfolio Value</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon icon-green"><i class="fas fa-chart-line"></i></div>
-          <div class="stat-value" id="dailyPnL">+$42,350</div>
-          <div class="stat-label">Today's P&L</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon icon-purple"><i class="fas fa-chart-bar"></i></div>
-          <div class="stat-value">8</div>
-          <div class="stat-label">Active Strategies</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon icon-blue"><i class="fas fa-users"></i></div>
-          <div class="stat-value">24</div>
-          <div class="stat-label">Trading Pairs</div>
+      <div class="hero-content">
+        <h1>Quantitative Excellence in Alternative Investments</h1>
+        <p>VRQuant Capital leverages cutting-edge algorithms, machine learning, and deep market insights to deliver superior risk-adjusted returns for sophisticated investors.</p>
+        <div class="cta-buttons">
+          <a href="#contact" class="btn btn-primary">Schedule Consultation</a>
+          <a href="#strategies" class="btn btn-secondary">Our Strategies</a>
         </div>
       </div>
 
-      <!-- Dashboard -->
-      <div class="dashboard" id="dashboard">
-        <div class="panel">
-          <div class="chart-header">
-            <div class="chart-title">Real-time Performance</div>
-            <div class="chart-trend"><i class="fas fa-chart-line"></i> <span id="trendText">+8.9% Today</span></div>
-          </div>
-
-          <div class="performance-chart" id="performanceChart" aria-label="Performance chart">
-            <!-- Chart bars generated by JS -->
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="positions-title">Active Positions</div>
-          <div id="positionsList">
-            <!-- Positions generated by JS -->
-          </div>
-        </div>
+      <div class="hero-image" aria-hidden="true">
+        <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100,300 L200,200 L300,250 L400,150 L500,200 L600,100 L700,150 L800,50 L800,600 L0,600 Z"
+                fill="url(#gradient)" opacity="0.3"/>
+          <path d="M100,400 L200,350 L300,380 L400,300 L500,350 L600,280 L700,320 L800,250 L800,600 L0,600 Z"
+                fill="url(#gradient2)" opacity="0.2"/>
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00c896" />
+              <stop offset="100%" stop-color="#4da6ff" />
+            </linearGradient>
+            <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4da6ff" />
+              <stop offset="100%" stop-color="#00c896" />
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
     </div>
   </section>
 
-  <!-- Strategies (added so nav works) -->
-  <section class="content-section" id="strategies">
+  <!-- Features / About -->
+  <section class="features" id="about">
     <div class="container">
-      <div class="content-card">
-        <h2 class="section-title" style="text-align:left;margin-bottom:.5rem;">Strategies</h2>
-        <p class="muted">A diversified suite of systematic strategies designed for different market regimes.</p>
-
-        <div class="grid-2" style="margin-top:1.5rem;">
-          <div>
-            <div class="pill"><i class="fas fa-wave-square"></i> Momentum</div>
-            <div class="pill"><i class="fas fa-arrows-rotate"></i> Mean Reversion</div>
-            <div class="pill"><i class="fas fa-bolt"></i> Volatility Breakout</div>
-            <div class="pill"><i class="fas fa-layer-group"></i> Multi-Asset Rotation</div>
-          </div>
-          <div class="muted">
-            <div class="list">
-              <div>• Risk controls: max drawdown guardrails, position limits, and circuit breakers.</div>
-              <div>• Execution: slippage-aware routing and time-weighted order slicing.</div>
-              <div>• Monitoring: 24/7 anomaly alerts and automated de-risking.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Performance (added so nav works) -->
-  <section class="content-section" id="performance">
-    <div class="container">
-      <div class="content-card">
-        <h2 class="section-title" style="text-align:left;margin-bottom:.5rem;">Performance</h2>
-        <p class="muted">Transparent reporting with risk metrics and attribution by strategy.</p>
-        <div class="grid-2" style="margin-top:1.5rem;">
-          <div class="stat-card" style="text-align:left;">
-            <div class="stat-label">Sharpe (simulated)</div>
-            <div class="stat-value">1.8</div>
-            <div class="muted">Risk-adjusted returns focus</div>
-          </div>
-          <div class="stat-card" style="text-align:left;">
-            <div class="stat-label">Max Drawdown (simulated)</div>
-            <div class="stat-value">-6.2%</div>
-            <div class="muted">Tight downside control</div>
-          </div>
-        </div>
-        <p class="muted" style="margin-top:1rem;font-size:.95rem;">
-          *Demo numbers for UI illustration. Replace with your real stats anytime.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- About (added so nav works) -->
-  <section class="content-section" id="about">
-    <div class="container">
-      <div class="content-card">
-        <h2 class="section-title" style="text-align:left;margin-bottom:.5rem;">About</h2>
-        <p class="muted">
-          VRQuant Capital is built for traders who want institutional-style automation with modern UX.
-          Plug in strategies, monitor risk, and scale across markets.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Features -->
-  <section class="features">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Why Choose VRQuant Capital?</h2>
-        <p class="section-subtitle">Our platform combines cutting-edge technology with institutional-grade infrastructure</p>
+      <div class="section-title">
+        <h2>Our Quantitative Edge</h2>
+        <p>VRQuant Capital combines advanced mathematics, computer science, and financial theory to identify and exploit market inefficiencies across global asset classes.</p>
       </div>
 
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon" style="background:rgba(139,92,246,.2);color:#8b5cf6;">
-            <i class="fas fa-shield-alt"></i>
-          </div>
-          <h3 class="feature-title">Institutional Security</h3>
-          <p class="feature-desc">Enterprise-grade security protocols, cold storage, and multi-signature wallets protect your assets at all times.</p>
+          <div class="feature-icon">α</div>
+          <h3>Alpha Generation</h3>
+          <p>Proprietary algorithms identify non-correlated return streams across multiple asset classes and time horizons.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon" style="background:rgba(59,130,246,.2);color:#3b82f6;">
-            <i class="fas fa-bolt"></i>
-          </div>
-          <h3 class="feature-title">Ultra-Fast Execution</h3>
-          <p class="feature-desc">Sub-millisecond order execution with direct market access and co-located servers worldwide.</p>
+          <div class="feature-icon">σ</div>
+          <h3>Risk Management</h3>
+          <p>Dynamic risk models continuously monitor and adjust portfolio exposure to minimize drawdowns during volatile markets.</p>
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon" style="background:rgba(16,185,129,.2);color:#10b981;">
-            <i class="fas fa-clock"></i>
-          </div>
-          <h3 class="feature-title">24/7 Monitoring</h3>
-          <p class="feature-desc">Continuous monitoring and automatic risk management ensure your strategies perform optimally around the clock.</p>
+          <div class="feature-icon">μ</div>
+          <h3>Machine Learning</h3>
+          <p>Advanced neural networks analyze alternative data sources to predict market movements before they appear in traditional indicators.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">β</div>
+          <h3>Execution Excellence</h3>
+          <p>Low-latency trading infrastructure and smart order routing minimize market impact and capture fleeting opportunities.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="cta" id="cta">
+  <!-- Performance -->
+  <section class="performance" id="performance">
     <div class="container">
-      <h2 class="cta-title">Ready to Start Your Algo Trading Journey?</h2>
-      <p class="cta-subtitle">Join thousands of traders who are already using VRQuant Capital to automate their trading strategies</p>
+      <div class="performance-container">
+        <div class="performance-content">
+          <h2>Institutional-Grade Performance</h2>
+          <p>Our systematic approach has delivered consistent returns through multiple market cycles while maintaining strict risk parameters. VRQuant Capital's flagship fund has outperformed traditional benchmarks with lower volatility.</p>
+          <p>Since inception, our strategies have generated significant alpha with a Sharpe ratio consistently above 1.5, demonstrating our ability to deliver superior risk-adjusted returns.</p>
 
-      <div class="cta-buttons">
-        <button class="btn btn-large btn-primary">
-          Create Free Account <i class="fas fa-arrow-right"></i>
-        </button>
-        <button class="btn btn-large btn-outline">
-          View Documentation
-        </button>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-number">12.8%</div>
+              <div class="stat-label">Annualized Return</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">0.32</div>
+              <div class="stat-label">Max Drawdown</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">1.85</div>
+              <div class="stat-label">Sharpe Ratio</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">94%</div>
+              <div class="stat-label">Winning Months</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <div class="chart-title">Annual Returns (%)</div>
+            <div class="chart-period">2018-2025</div>
+          </div>
+
+          <div class="chart-bars">
+            <div class="bar-row">
+              <div class="bar" style="height: 65%"><span class="bar-value">18.2%</span></div>
+              <div class="bar" style="height: 75%"><span class="bar-value">21.5%</span></div>
+              <div class="bar" style="height: 55%"><span class="bar-value">15.3%</span></div>
+              <div class="bar" style="height: 85%"><span class="bar-value">24.1%</span></div>
+              <div class="bar" style="height: 70%"><span class="bar-value">19.8%</span></div>
+              <div class="bar" style="height: 90%"><span class="bar-value">25.6%</span></div>
+              <div class="bar" style="height: 60%"><span class="bar-value">17.1%</span></div>
+              <div class="bar" style="height: 80%"><span class="bar-value">22.7%</span></div>
+            </div>
+
+            <div class="bar-labels" aria-hidden="true">
+              <span class="bar-label">2018</span>
+              <span class="bar-label">2019</span>
+              <span class="bar-label">2020</span>
+              <span class="bar-label">2021</span>
+              <span class="bar-label">2022</span>
+              <span class="bar-label">2023</span>
+              <span class="bar-label">2024</span>
+              <span class="bar-label">2025</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Strategies -->
+  <section class="strategies" id="strategies">
+    <div class="container">
+      <div class="section-title">
+        <h2>Investment Strategies</h2>
+        <p>VRQuant Capital offers a suite of complementary quantitative strategies designed to perform across market environments.</p>
+      </div>
+
+      <div class="strategies-grid">
+        <div class="strategy-card">
+          <div class="strategy-header">
+            <h3>Systematic Macro</h3>
+          </div>
+          <div class="strategy-content">
+            <p>Exploits price dislocations across global equity, fixed income, currency, and commodity markets using a multi-factor approach.</p>
+            <div class="strategy-stats">
+              <div class="stat-box">
+                <div class="value">14.2%</div>
+                <div class="label">Net Return</div>
+              </div>
+              <div class="stat-box">
+                <div class="value">1.65</div>
+                <div class="label">Sharpe Ratio</div>
+              </div>
+              <div class="stat-box">
+                <div class="value">$1.2B</div>
+                <div class="label">AUM</div>
+              </div>
+              <div class="stat-box">
+                <div class="value">4.8%</div>
+                <div class="label">Volatility</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="strategy-card">
+          <div class="strategy-header">
+            <h3>Equity Market Neutral</h3>
+          </div>
+          <div class="strategy-content">
+            <p>Long-short equity strategy leveraging machine learning to identify mispricings while maintaining sector and factor neutrality.</p>
+            <div class="strategy-stats">
+              <div class="stat-box">
+                <div class="value">11.8%</div>
+                <div class="label">Net Return</div>
+              </div>
+              <div class="stat-box">
+                <div class="value">2.10</div>
+                <div class="label">Sharpe Ratio</div>
+              </div>
+              <div class="stat-box">
+                <div class="value">$850M</div>
+                <div class="label">AUM</div>
+              </div>
+              <div class="stat-box">
+                <div class="value">3.2%</div>
+                <div class="label">Volatility</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="strategy-card">
+          <div class="strategy-header">
+            <h3>Statistical Arbitrage</h3>
+          </div>
+          <div class="strategy-content">
+            <p>High-frequency strategy capturing short-term pricing inefficiencies across correlated securities using advanced pattern recognition.</p>
+            <div class="strategy-stats">
+              <div class="stat-box">
+                <div class="value">16.5%</div>
+                <div class="label">Net Return</div>
+              </div>
+              <div class="stat-box">
+                <div class="value">1.95</div>
+                <div class="label">Sharpe Ratio</div>
+              </div>
+              <div class="stat-box">
+                <div class="value">$620M</div>
+                <div class="label">AUM</div>
+              </div>
+              <div class="stat-box">
+                <div class="value">5.7%</div>
+                <div class="label">Volatility</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / Contact -->
+  <section class="cta-section" id="contact">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Partner With a Quantitative Leader</h2>
+        <p>VRQuant Capital provides institutional investors, family offices, and high-net-worth individuals access to sophisticated quantitative strategies previously available only to the largest endowments and sovereign wealth funds.</p>
+        <a href="#" class="btn btn-primary">Request Investor Materials</a>
       </div>
     </div>
   </section>
@@ -477,201 +1005,108 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-          VRQuant Capital
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo" style="margin-bottom: 25px; font-size: 24px;">VRQuant Capital</div>
+          <p>Pioneering quantitative investment solutions that deliver consistent, uncorrelated returns through market cycles.</p>
+          <p style="margin-top: 20px; font-weight: 500;">New York • London • Singapore</p>
         </div>
-        <div class="copyright">&copy; 2026 VRQuant Capital. All rights reserved.</div>
+
+        <div class="footer-col">
+          <h3>Strategies</h3>
+          <ul class="footer-links">
+            <li><a href="#">Systematic Macro</a></li>
+            <li><a href="#">Equity Market Neutral</a></li>
+            <li><a href="#">Statistical Arbitrage</a></li>
+            <li><a href="#">Volatility Arbitrage</a></li>
+            <li><a href="#">Cryptocurrency Quant</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Company</h3>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Leadership Team</a></li>
+            <li><a href="#">Research Publications</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">ESG Commitment</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Contact</h3>
+          <p>123 Quant Avenue, 45th Floor<br />New York, NY 10010</p>
+          <p style="margin: 15px 0;">info@vrquantcapital.com</p>
+          <p>+1 (212) 555-7890</p>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <p>&copy; 2026 VRQuant Capital. All rights reserved. | For informational purposes only</p>
+        <p style="margin-top: 8px; font-size: 14px; opacity: 0.7;">This website is for informational purposes only. Past performance is not indicative of future results. Investing involves risk including the potential loss of principal.</p>
       </div>
     </div>
   </footer>
 
   <script>
-    // ====== State ======
-    let portfolioValue = 1250000;
-    let dailyPnL = 42350;
-    let isRunning = false;
-    let intervalId = null;
-
-    // ====== DOM ======
-    const startBtn = document.getElementById('startBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const portfolioValueEl = document.getElementById('portfolioValue');
-    const dailyPnLEl = document.getElementById('dailyPnL');
-    const performanceChart = document.getElementById('performanceChart');
-    const positionsList = document.getElementById('positionsList');
-    const header = document.getElementById('siteHeader');
-    const trendText = document.getElementById('trendText');
-
-    // ====== Data ======
-    const performanceData = [
-      { time: '09:00', value: 100 },
-      { time: '10:00', value: 102 },
-      { time: '11:00', value: 101 },
-      { time: '12:00', value: 105 },
-      { time: '13:00', value: 103 },
-      { time: '14:00', value: 107 },
-      { time: '15:00', value: 106 },
-      { time: '16:00', value: 109 },
-    ];
-
-    const activePositions = [
-      { symbol: 'BTC/USD', direction: 'long', entry: 42350, current: 43120, pnl: 1.82 },
-      { symbol: 'ETH/USD', direction: 'short', entry: 2850, current: 2790, pnl: 2.11 },
-      { symbol: 'SOL/USD', direction: 'long', entry: 98.5, current: 102.3, pnl: 3.86 },
-      { symbol: 'AAPL', direction: 'long', entry: 182.5, current: 185.2, pnl: 1.48 },
-    ];
-
-    // ====== Helpers ======
-    function formatMoney(n){
-      const sign = n < 0 ? '-' : '';
-      const abs = Math.abs(n);
-      return sign + '$' + abs.toLocaleString('en-US', { maximumFractionDigits: 0 });
-    }
-
-    function updateStats(){
-      portfolioValueEl.textContent = formatMoney(portfolioValue);
-      dailyPnLEl.textContent = (dailyPnL >= 0 ? '+' : '-') + formatMoney(Math.abs(dailyPnL));
-      dailyPnLEl.style.color = dailyPnL >= 0 ? '#10b981' : '#ef4444';
-    }
-
-    // Normalize chart values so bars always fit inside (no 120% overflow)
-    function renderChart(){
-      performanceChart.innerHTML = '';
-
-      const values = performanceData.map(p => p.value);
-      const min = Math.min(...values);
-      const max = Math.max(...values);
-      const range = Math.max(1, max - min);
-
-      performanceData.forEach(point => {
-        const wrap = document.createElement('div');
-        wrap.className = 'bar-wrap';
-
-        const bar = document.createElement('div');
-        bar.className = 'chart-bar';
-
-        // map to 20%..100% height
-        const normalized = 20 + ((point.value - min) / range) * 80;
-        bar.style.height = normalized + '%';
-
-        const time = document.createElement('div');
-        time.className = 'bar-time';
-        time.textContent = point.time;
-
-        wrap.appendChild(bar);
-        wrap.appendChild(time);
-        performanceChart.appendChild(wrap);
-      });
-    }
-
-    function renderPositions(){
-      positionsList.innerHTML = '';
-      activePositions.forEach(position => {
-        const positionEl = document.createElement('div');
-        positionEl.className = 'position-item';
-
-        const isLong = position.direction === 'long';
-        const pnlClass = position.pnl >= 0 ? 'pnl-positive' : 'pnl-negative';
-        const progressClass = position.pnl >= 0 ? 'progress-green' : 'progress-red';
-        const progressWidth = Math.min(Math.abs(position.pnl) * 10, 100);
-
-        positionEl.innerHTML = `
-          <div class="position-header">
-            <div class="position-symbol">${position.symbol}</div>
-            <div class="position-direction ${isLong ? 'long' : 'short'}">${position.direction.toUpperCase()}</div>
-          </div>
-          <div class="position-details">
-            <span>Entry: $${position.entry}</span>
-            <span>Current: $${position.current}</span>
-          </div>
-          <div class="position-pnl">
-            <span class="${pnlClass}">${position.pnl >= 0 ? '+' : ''}${position.pnl}%</span>
-            <div class="progress-bar">
-              <div class="progress-fill ${progressClass}" style="width:${progressWidth}%"></div>
-            </div>
-          </div>
-        `;
-        positionsList.appendChild(positionEl);
-      });
-    }
-
-    // ====== Trading Simulation ======
-    function toggleTrading(){
-      if (isRunning){
-        clearInterval(intervalId);
-        startBtn.innerHTML = '<i class="fas fa-play"></i> Start Live Demo';
-        startBtn.className = 'btn btn-large btn-success';
-        isRunning = false;
-        return;
-      }
-
-      intervalId = setInterval(() => {
-        portfolioValue += (Math.random() - 0.5) * 2000;
-        dailyPnL += (Math.random() - 0.5) * 500;
-        updateStats();
-
-        // update chart points slightly
-        performanceData.forEach(p => {
-          p.value = Math.max(80, Math.min(120, p.value + (Math.random() - 0.5) * 5));
-        });
-        renderChart();
-
-        // update trend text loosely based on pnl
-        const pct = (dailyPnL / 475000) * 100; // just for demo display
-        trendText.textContent = `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}% Today`;
-      }, 2000);
-
-      startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause Trading';
-      startBtn.className = 'btn btn-large btn-danger';
-      isRunning = true;
-    }
-
-    function resetDemo(){
-      portfolioValue = 1250000;
-      dailyPnL = 42350;
-
-      // reset chart
-      const defaults = [100,102,101,105,103,107,106,109];
-      performanceData.forEach((p,i)=>p.value = defaults[i]);
-
-      updateStats();
-      renderChart();
-      renderPositions();
-
-      if (isRunning) toggleTrading();
-    }
-
-    // ====== Header + Active nav ======
-    function onScroll(){
-      header.classList.toggle('scrolled', window.scrollY > 10);
-
-      // active nav highlight
-      const sections = ['dashboard','strategies','performance','about'];
-      let current = 'dashboard';
-      for (const id of sections){
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= 140) current = id;
-      }
-      document.querySelectorAll('.nav-link').forEach(a=>{
-        const href = a.getAttribute('href') || '';
-        a.classList.toggle('active', href === `#${current}`);
-      });
-    }
-
-    // ====== Init ======
-    startBtn.addEventListener('click', toggleTrading);
-    resetBtn.addEventListener('click', resetDemo);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('load', () => {
-      updateStats();
-      renderChart();
-      renderPositions();
-      onScroll();
+    // Mobile Menu Toggle
+    document.querySelector('.mobile-menu-btn').addEventListener('click', function () {
+      document.querySelector('nav ul').classList.toggle('active');
     });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('nav ul li a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelector('nav ul').classList.remove('active');
+      });
+    });
+
+    // Header scroll effect
+    window.addEventListener('scroll', function () {
+      const header = document.querySelector('header');
+      if (window.scrollY > 100) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Active nav highlight on scroll (nice touch)
+    const sections = ['home', 'strategies', 'performance', 'about', 'contact']
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    function setActiveNav() {
+      const scrollPos = window.scrollY + 120;
+      let current = 'home';
+      for (const sec of sections) {
+        if (sec.offsetTop <= scrollPos) current = sec.id;
+      }
+      document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+      const activeLink = document.querySelector(`nav a[href="#${current}"]`);
+      if (activeLink) activeLink.classList.add('active');
+    }
+
+    window.addEventListener('scroll', setActiveNav);
+    setActiveNav();
+
+    // Initialize header state
+    if (window.scrollY > 100) document.querySelector('header').classList.add('scrolled');
   </script>
 </body>
 </html>
